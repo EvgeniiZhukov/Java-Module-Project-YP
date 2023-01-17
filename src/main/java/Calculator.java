@@ -1,9 +1,10 @@
 import java.util.Scanner;
 
 public class Calculator {
-    String nameOfTheDish, totalListOfItems ="Добавленные товары:", dots;
+    String nameOfTheDish, dots;
     float priceOfTheDish, totalPriceOfDishes;
     int priceOfItemInt;
+    StringBuilder totalListOfItems = new StringBuilder("Добавленные товары:");
     Scanner scanner = new Scanner(System.in);
 
     public float enterListOfItems(){
@@ -18,23 +19,18 @@ public class Calculator {
             if (nameOfTheDish.equalsIgnoreCase("завершить")){
                 break;
             }
-            totalListOfItems += ("\n" + nameOfTheDish);
+            totalListOfItems.append("\n" + nameOfTheDish);
             System.out.println("\nВведите стоимость блюда:");
             while(true)
             {
                 if(scanner.hasNextFloat())
                 {
-                    priceOfTheDish = scanner.nextFloat();
-                    scanner.nextLine();
+                    priceOfTheDish = Float.parseFloat(scanner.nextLine().replace(',','.'));
                     if(priceOfTheDish>=0){
                         totalPriceOfDishes += priceOfTheDish;
                         priceOfItemInt = (int) priceOfTheDish;
-                        dots = "";
-                        for(int i = nameOfTheDish.length(); i<= 50; i++)
-                        {
-                            dots +="." ;
-                        }
-                        totalListOfItems += (dots + "." + priceOfItemInt + " руб " + (int) ((priceOfTheDish * 100 - priceOfItemInt * 100)) + " коп");
+                        dots = ".".repeat(50 - nameOfTheDish.length());
+                        totalListOfItems.append(dots + "." + priceOfItemInt + " руб " + (int) ((priceOfTheDish * 100 - priceOfItemInt * 100)) + " коп");
                         System.out.println("\nБлюдо успешно добавлено!");
                         break;
                     }
@@ -48,7 +44,7 @@ public class Calculator {
                     if(scanner.nextLine().equalsIgnoreCase("завершить")){
                         System.out.println("\nДля завершения ввода добавьте цену последнего товара и введите \"Завершить\"!");
                     }
-                    System.out.println("Стоимость блюда должнабыть числом в формате рубли.копейки попробуйте снова!");
+                    System.out.println("Стоимость блюда должнабыть числом в формате рубли,копейки попробуйте снова!");
                 }
             }
         }
@@ -61,20 +57,25 @@ public class Calculator {
         float amountForeachGuest;
         String templateOfOutPut = "Каждый гость должен заплатить: %.2f";
         amountForeachGuest = totalAmount / guestAmount;
-        switch ((int)amountForeachGuest % 10){
-            default:{
-                System.out.println(String.format(templateOfOutPut, amountForeachGuest) + " рублей");
-                break;
-            }
-            case (1) : {
-                System.out.println(String.format(templateOfOutPut, amountForeachGuest) + " рубль");
-                break;
-            }
-            case (2) :
-            case (3) :
-            case (4) : {
-                System.out.println(String.format(templateOfOutPut, amountForeachGuest) + " рубля");
-                break;
+        if (11<=(int)amountForeachGuest % 100 && (int)amountForeachGuest % 100<=14){
+            System.out.println(String.format(templateOfOutPut, amountForeachGuest) + " рублей");
+        }
+        else{
+                switch ((int)amountForeachGuest % 10){
+                default:{
+                    System.out.println(String.format(templateOfOutPut, amountForeachGuest) + " рублей");
+                    break;
+                }
+                case (1) : {
+                    System.out.println(String.format(templateOfOutPut, amountForeachGuest) + " рубль");
+                    break;
+                }
+                case (2) :
+                case (3) :
+                case (4) : {
+                    System.out.println(String.format(templateOfOutPut, amountForeachGuest) + " рубля");
+                    break;
+                }
             }
         }
     }
